@@ -1,4 +1,4 @@
-# Navigation_module
+# Nav_module_PRI
 
 ## Installation
 
