@@ -1,0 +1,6 @@
+global_costmap:
+    global_frame: map
+    static_map: true
+    map_type: costmap
+    resolution: 0.1
+    observation_sources: laser_scan_sensor

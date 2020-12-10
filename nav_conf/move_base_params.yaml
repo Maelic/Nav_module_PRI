@@ -1,0 +1,17 @@
+controller_frequency: 8.0  # 8.0 control the base in hz
+controller_patience: 1.5   # 5.0 wait seconds for control
+planner_patience: 0.8      # 5.0 wait seconds for plan
+planner_frequency: 0.5     # 0.0 only plan on problems
+clearing_rotation_allowed: false
+
+recovery_behaviors:
+  - {name: conservative_reset, type: clear_costmap_recovery/ClearCostmapRecovery}
+  - {name: aggressive_reset, type: clear_costmap_recovery/ClearCostmapRecovery}
+
+conservative_reset:
+  layer_names: ["obstacle_layer"]
+  reset_distance: 2.0
+
+aggressive_reset:
+  layer_names: ["obstacle_layer"]
+  reset_distance: 0.0

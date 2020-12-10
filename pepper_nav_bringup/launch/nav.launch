@@ -1,0 +1,33 @@
+<launch>
+
+
+    <!-- Pointcloud -> Laserscan -->
+    <node pkg="depthimage_to_laserscan" type="depthimage_to_laserscan" name="depthimage_to_laserscan" >
+         <remap from="image" to="/naoqi_driver/camera/depth/image_raw" />
+        <param name="scan_time" type="double" value="0.2" />
+        <param name="range_min" type="double" value="0.4" />
+        <param name="range_max" type="double" value="8.0" />
+        <param name="scan_height" type="double" value="1.0" />
+        <param name="output_frame_id" type="string" value="base_link" />
+    </node>
+
+    <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen" clear_params="true">
+        <remap from="/scan" to="/laser/scan_merged"/>
+        <rosparam file="$(find pepper_nav_bringup)/nav_conf/move_base_params.yaml" command="load" />
+        <rosparam file="$(find pepper_nav_bringup)/nav_conf/costmap_common_params.yaml" command="load" ns="global_costmap" />
+        <rosparam file="$(find pepper_nav_bringup)/nav_conf/costmap_common_params.yaml" command="load" ns="local_costmap" />
+        <rosparam file="$(find pepper_nav_bringup)/nav_conf/local_costmap_params.yaml" command="load" />
+        <rosparam file="$(find pepper_nav_bringup)/nav_conf/global_costmap_params.yaml" command="load" />
+        <rosparam file="$(find pepper_nav_bringup)/nav_conf/base_local_planner_params.yaml" command="load" />
+        <rosparam file="$(find pepper_nav_bringup)/nav_conf/move_base_params.yaml" command="load" />
+    </node>
+
+    <arg name="map_file" default="clf.yaml" />
+    <arg name="map" default="$(arg map_file)" />
+    <node name="map_server" pkg="map_server" type="map_server" args="$(arg map)"/>
+
+    <include file="$(find pepper_nav_bringup)/launch/amcl.launch">
+        <arg name="topic_scan" value="/naoqi_driver/laser" />
+    </include>
+</launch>
+
